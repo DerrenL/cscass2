@@ -3,7 +3,6 @@ import { Component } from 'react';
 import axios from 'axios';
 import $ from 'jquery';
 
-
 const deepai = require('deepai');
 
 deepai.setApiKey('d3e92cd6-0e8d-4921-aea4-6dd9d6f18b72');
@@ -31,9 +30,11 @@ class UploadImage extends Component {
 		super( props );
 		this.state = {
 		 selectedFile: null,
-		 selectedFiles: null
+     selectedFiles: null,
+     fileName: null
 		}
-	   }
+     }
+     
 
 	   singleFileChangedHandler = ( event ) => {
 		  // console.log(event.target.files);
@@ -44,7 +45,6 @@ class UploadImage extends Component {
 
 	   singleFileUploadHandler = ( event ) => {
     const data = new FormData();// If file selected
-    const array=[];
     //console.log(this.state.selectedFile);
 		if ( this.state.selectedFile ) {
       (async () => {let test = await init()
@@ -74,8 +74,8 @@ class UploadImage extends Component {
          }
         } else {
          // Success
-         let fileName = response.data;
-         console.log( 'fileName', fileName );
+        this.fileName = response.data;
+         console.log( 'fileName', this.fileName);
          this.ocShowAlert( 'File Uploaded', '#3089cf' );
         }
          }
@@ -103,7 +103,10 @@ class UploadImage extends Component {
 		} else {
 		 // if file not selected throw error
 		 this.ocShowAlert( 'Please upload file', 'red' );
-		}};
+    }
+  };
+
+
 
 		// ShowAlert Function
  	ocShowAlert = ( message, background = '#3089cf' ) => {
@@ -137,6 +140,17 @@ class UploadImage extends Component {
        			<input type="file" id="wat" onChange={this.singleFileChangedHandler}/>
       			<div className="mt-5">
         			<button className="btn btn-info" onClick={this.singleFileUploadHandler}>Upload!</button>
+       			</div>
+            <br></br>
+            <input type="text" placeholder="Talent's Name.." id="talentname" required></input>
+            <br></br>
+            <input type="number" placeholder="Talent's Age.." id="talentage" required></input>
+            <br></br>
+            <input type="text" placeholder="Talent's Occupation.." id="talentoccupation" required></input>
+            <br></br>
+            <textarea id="talentdescription" placeholder="More about talent.." required></textarea>
+            <div className="mt-5">
+        			<button className="btn btn-info" onClick={this.updatetalentinfo}>Submit talent information</button>
        			</div>
       			</div>
      			</div>

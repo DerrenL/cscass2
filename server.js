@@ -23,7 +23,7 @@ const postRoute = require('./routes/posts');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 
-//const router = express.Router();
+
 
 const app = express();
 const endpointSecret = 'whsec_D5y8KpSYruKw3jTdbxImVPTp4NIibsSP';
@@ -60,16 +60,18 @@ app.use(
 //  * bodyParser.json() returns a function that is passed as a param to app.use() as middleware
 //  * With the help of this method, we can now send JSON to our express application.
 //  */
-// // app.use(bodyParser.urlencoded({ extended: false }));
-// // app.use(bodyParser.json());
-
-// // We export the router so that the server.js file can pick it up
-// module.exports = router;
-
-// const profile = require('./routes/api/profile');
-// app.use('/api/profile', profile);
 
 
+
+//for s3 uploading image
+const router = express.Router();
+const profile = require('./routes/api/profile');
+app.use('/api/profile', profile);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// We export the router so that the server.js file can pick it up
+module.exports = router;
 // Combine react and node js servers while deploying( YOU MIGHT HAVE ALREADY DONE THIS BEFORE
 // What you need to do is make the build directory on the heroku, which will contain the index.html of your react app and then point the HTTP request to the client/build directory
 
@@ -211,11 +213,19 @@ app.post('/stripe-webhook', async (req, res) => {
 
 });
 
+//recombee
+// Import the library:
+var cors = require('cors');
+// Then use it before your routes are set up:
+app.use(cors());
+//app.use(cors({credentials: true, origin: 'http://localhost:3000/'}));
+var http = require("http");
+var httpServer = http.createServer(app);
 
 
 // Set up a port
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.log(`Server running on port: ${port}`));
+httpServer.listen(port, () => console.log(`Server running on port: ${port}`));
 
 
