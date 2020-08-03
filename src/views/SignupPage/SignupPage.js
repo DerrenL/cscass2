@@ -31,14 +31,7 @@ const useStyles = makeStyles(styles);
 
 
 export default function SignupPage(props) {
-  /*function register(){
-    axios
-    .post("/api/user/register",{
-      "name": registername.toString(),
-      "email": registeremail.toString(),
-      "password": registerpassword.toString()
-  })
-  }*/
+  
   function register(){
     if (registeremail != "" && registerpassword != "" && registerconfirmpassword != "") {
       if (registerpassword == registerconfirmpassword) {

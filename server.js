@@ -21,12 +21,27 @@ require('dotenv').config({ path: './.env' });
 const authRoute = require('./routes/auth');
 const postRoute = require('./routes/posts');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+var recombee = require("recombee-api-client");
+var rqs = recombee.requests;
+var client = new recombee.ApiClient(
+  "csc-assignment2-dev",
+  "LslaDRa4LOfTo6ZYEHOFmP0O79XZ3hzZkCfrO1cG5WXwWHHSxZtuJOUaWIfyQFTD"
+);
+// Import the library:
+var cors = require('cors');
+
 
 
 
 
 const app = express();
 const endpointSecret = 'whsec_D5y8KpSYruKw3jTdbxImVPTp4NIibsSP';
+
+// Then use it before your routes are set up:
+app.use(cors());
+//app.use(cors({credentials: true, origin: 'http://localhost:3000/'}));
+var http = require("http");
+var httpServer = http.createServer(app);
 
 //webhook
 app.use(express.static(process.env.STATIC_DIR));
@@ -214,13 +229,47 @@ app.post('/stripe-webhook', async (req, res) => {
 });
 
 //recombee
-// Import the library:
-var cors = require('cors');
-// Then use it before your routes are set up:
-app.use(cors());
-//app.use(cors({credentials: true, origin: 'http://localhost:3000/'}));
-var http = require("http");
-var httpServer = http.createServer(app);
+// when user click/interact on famous person image
+app.post("/recombee/interaction/:uid", (req, res) => {
+	let interaction = req.query.eventId;
+	client.send(
+	  new rqs.AddDetailView(req.params.uid, interaction),
+	  (err, response) => {
+		if (err) {
+		  console.error(err);
+		  return res.status(500).send(err);
+		}
+		res.send(response);
+	  }
+	);
+  });
+  
+  // when user needs recommandations
+  app.get("/recombee/recommand", (req, res) => {
+	client.send(
+	  new rqs.RecommendItemsToUser(req.query.uid, 3, {
+		returnProperties: true,
+		cascadeCreate: true,
+	  }),
+	  (err, recommended) => {
+		if (err) {
+		  console.error(err);
+		  return res.status(500).send(err);
+		}
+		res.send(recommended);
+	  }
+	);
+  });
+  
+  // when user first create account, under SignupPage.js
+  app.post("/recombee/adduser/:uid", (req, res) => {
+	let uid = req.params.uid;
+	client.send(new rqs.AddUser(uid));
+	res.status(201).send("OK");
+  });
+
+
+
 
 //cross browser testing
 const webdriver = require('selenium-webdriver');

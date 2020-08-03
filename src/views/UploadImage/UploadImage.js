@@ -170,7 +170,11 @@ class UploadImage extends Component {
        			</div>
       			</div>
      			</div>
+        <div className="mt-5">
+        <button className="btn btn-info"  onClick={event =>  window.location.href='/afterlogin-page'}>Home</button>
+        </div>
 			</div>
+      
 		);
 	}
 }

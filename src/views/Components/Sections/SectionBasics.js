@@ -14,11 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Table from "components/Table/Table.js";
-
-
-import paul from "assets/img/paul.jpg";
-import brad from "assets/img/brad.jpg";
-import wes from "assets/img/wes.jpg";
+import {auth} from "../../../Firebase.js";
 
 
 import styles from "assets/jss/material-kit-react/views/componentsSections/basicsStyle.js";
@@ -27,6 +23,34 @@ import styles from "assets/jss/material-kit-react/views/componentsSections/basic
 const useStyles = makeStyles(styles);
 
 export default function SectionBasics() {
+
+  var CardContentStyle={
+    display:'fixed',
+    height:'190px'
+  }
+
+  const array=[];
+  const [testb,setTestb] = useState();
+  //recombee
+  if(auth.currentUser){
+
+    let user = auth.currentUser;
+    axios
+      .get(`/recombee/recommand?uid=${user.uid}`)
+      .then((response) => {
+      });
+      }else{
+      axios
+      .get(`/recombee/recommand`)
+      .then((response) => {
+        console.log(response.data.recomms);
+        array.push(response.data.recomms);
+        console.log(array);
+        console.log("name");
+        console.log(array[0][0].values.name);
+        setTestb(array)
+      });
+}
   
   let test = [];
   const [testa, setTesta] = useState();
@@ -66,6 +90,92 @@ export default function SectionBasics() {
     }
   }
 
+  function haha(){
+    if(testb!=undefined){
+      console.log(testb[0][0].values.name);
+      return(
+        <GridItem xs={12} sm={12} md={4}>
+          <Card className={classes.root}>
+            <CardActionArea>
+              <CardMedia
+                component="img"
+                height="160"
+                className={classes.media}
+                image={testb[0][0].values.image_url}
+                title=""
+              />
+              <CardContent style={CardContentStyle}>
+                <Typography gutterBottom variant="h5" component="h3">
+                  {testb[0][0].values.name}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {testb[0][0].values.description}
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
+        </GridItem> 
+
+      );
+      }
+  }
+
+    function haha2(){
+      if(testb!=undefined){
+        return (
+        <GridItem xs={12} sm={12} md={4}>
+        <Card className={classes.root}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              height="160"
+              className={classes.media}
+              image={testb[0][1].values.image_url}
+              title=""
+            />
+            <CardContent style={CardContentStyle}>
+              <Typography gutterBottom variant="h5" component="h3">
+                {testb[0][1].values.name}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" component="p">
+                {testb[0][1].values.description}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+        </GridItem> 
+    );
+  }
+  }
+
+  function haha3(){
+    if(testb!=undefined){
+      return (
+      <GridItem xs={12} sm={12} md={4}>
+      <Card className={classes.root}>
+        <CardActionArea>
+          <CardMedia
+            component="img"
+            height="160"
+            className={classes.media}
+            image={testb[0][2].values.image_url}
+            title=""
+          />
+          <CardContent style={CardContentStyle}>
+            <Typography gutterBottom variant="h5" component="h3">
+              {testb[0][2].values.name}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {testb[0][2].values.description}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+      </GridItem> 
+  );
+}
+}
+
 
 
   const classes = useStyles();
@@ -77,71 +187,9 @@ export default function SectionBasics() {
           <h4>Recommended for you</h4>
         </div>
         <GridContainer>
-          <GridItem xs={12} sm={12} md={4}>
-            <Card className={classes.root}>
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  className={classes.media}
-                  image={paul}
-                  title=""
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h3">
-                    Paul Phua
-                </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    Paul Phua is a professional poker player who host Triton Poker competition
-                </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </GridItem>
-
-          <GridItem xs={12} sm={12} md={4}>
-            <Card className={classes.root}>
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  className={classes.media}
-                  image={brad}
-                  title=""
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h3">
-                    Brad Owen
-                </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    Brad Owen is a professional poker player who host Triton Poker competition
-                </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </GridItem>
-
-          <GridItem xs={12} sm={12} md={4}>
-            <Card className={classes.root}>
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  className={classes.media}
-                  image={wes}
-                  title=""
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="h3">
-                    Wes Cutshall
-                </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    Wes Cutshall is a professional poker player who host Triton Poker competition
-                </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </GridItem>
+         {haha()}
+         {haha2()}
+         {haha3()}
         </GridContainer>
         <br></br>
 
