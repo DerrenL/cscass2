@@ -78,7 +78,7 @@ function checkFileType( file, cb ){
 //  * @desc Upload post image
 //  * @access public
 //  */
-router.post( '/profile-img-upload', ( req, res ) => {
+router.post( 'https://csc-test-app.herokuapp.com/profile-img-upload', ( req, res ) => {
     profileImgUpload( req, res, ( error ) => {
     // console.log( 'requestOkokok', req.file );
     // console.log( 'error', error );
