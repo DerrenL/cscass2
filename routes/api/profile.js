@@ -88,7 +88,7 @@ function checkFileType( file, cb ){
 //  * @access public
 //  */
 let shorturl;
-router.post( '/profile-img-upload', ( req, res ) => {
+router.post( 'https://csc-test-app.herokuapp.com/profile-img-upload', ( req, res ) => {
     profileImgUpload( req, res, ( error ) => {
     // console.log( 'requestOkokok', req.file );
     // console.log( 'error', error );
@@ -137,7 +137,7 @@ router.post( '/profile-img-upload', ( req, res ) => {
   });
 
 
-  router.get( '/talent-details', ( req, res ) => {
+  router.get( 'https://csc-test-app.herokuapp.com/talent-details', ( req, res ) => {
     con.query("select * from main.test", function (err, result, fields) {
       if (err) throw err;
       if(result){
@@ -147,7 +147,7 @@ router.post( '/profile-img-upload', ( req, res ) => {
   });
 })
 
-router.get( '/onetalent-details/:talentID', ( req, res ) => {
+router.get( 'https://csc-test-app.herokuapp.com/onetalent-details/:talentID', ( req, res ) => {
   var id = req.params.talentID;
   con.query("select * from main.test where id =?",id , function (err, result, fields) {
     if (err) throw err;
@@ -158,7 +158,7 @@ router.get( '/onetalent-details/:talentID', ( req, res ) => {
 });
 })
 
-router.delete( '/delete-talent/:talentID', ( req, res ) => {
+router.delete( 'https://csc-test-app.herokuapp.com/delete-talent/:talentID', ( req, res ) => {
   var id = req.params.talentID;
   con.query("delete from main.test where id = ?",id ,function (err, result, fields) {
     if (err) throw err;
@@ -169,7 +169,7 @@ router.delete( '/delete-talent/:talentID', ( req, res ) => {
 });
 })
 
-router.put( '/edit-talent/:talentID', ( req, res ) => {
+router.put( 'https://csc-test-app.herokuapp.com/edit-talent/:talentID', ( req, res ) => {
   var id = req.params.talentID;
   let data = [req.body.url,req.body.name,req.body.age,req.body.occupation,req.body.description, id];
   con.query("update main.test set url= ? , talentName = ?, talentAge = ? ,talentOccupation=?,talentDescription=?  where id = ?",data ,function (err, result, fields) {
