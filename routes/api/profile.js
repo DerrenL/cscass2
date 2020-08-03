@@ -80,6 +80,7 @@ function checkFileType( file, cb ){
       throw e;
     }
   }
+  
 
 //    /**
 //  * @route POST api/profile/business-img-upload
@@ -100,19 +101,21 @@ router.post( '/profile-img-upload', ( req, res ) => {
       res.json( 'Error: No File Selected' );
     } else {
       // If Success
+      const test = JSON.parse(req.body.data2);
+      console.log(test.name);
       const imageName = req.file.key;
       let imageLocation = req.file.location;// Save the file name into database into profile model
       con.query("CREATE DATABASE IF NOT EXISTS main;");
         con.query("USE main;");
         con.query(
-          "CREATE TABLE IF NOT EXISTS file(id int NOT NULL AUTO_INCREMENT, url varchar(100), PRIMARY KEY(id));",
+          "CREATE TABLE IF NOT EXISTS test(id int NOT NULL AUTO_INCREMENT, url varchar(100), talentName varchar(100), talentAge int, talentOccupation varchar(100), talentDescription varchar(300), PRIMARY KEY(id));",
           function (error, result, fields) {
             console.log(result);
           }
         );
     
         con.query(
-          `INSERT INTO main.file (url) VALUES ('${imageLocation}')`,
+          `INSERT INTO main.test (url,talentName,talentAge,talentOccupation,talentDescription) VALUES ('${imageLocation}','${test.name}', '${test.age}','${test.occupation}', '${test.description}')`,
           function (err, result, fields) {
             if (err) res.send(err);
             if (result) {
@@ -129,12 +132,53 @@ router.post( '/profile-img-upload', ( req, res ) => {
           location: shorturl
        });
       })()
-    
-        
-       
      }
    });
   });
 
+
+  router.get( '/talent-details', ( req, res ) => {
+    con.query("select * from main.test", function (err, result, fields) {
+      if (err) throw err;
+      if(result){
+        res.send(result);
+      }
+      console.log(result);
+  });
+})
+
+router.get( '/onetalent-details/:talentID', ( req, res ) => {
+  var id = req.params.talentID;
+  con.query("select * from main.test where id =?",id , function (err, result, fields) {
+    if (err) throw err;
+    if(result){
+      res.send(result);
+    }
+    console.log(result);
+});
+})
+
+router.delete( '/delete-talent/:talentID', ( req, res ) => {
+  var id = req.params.talentID;
+  con.query("delete from main.test where id = ?",id ,function (err, result, fields) {
+    if (err) throw err;
+    if(result){
+      res.send(result);
+    }
+    console.log(result);
+});
+})
+
+router.put( '/edit-talent/:talentID', ( req, res ) => {
+  var id = req.params.talentID;
+  let data = [req.body.url,req.body.name,req.body.age,req.body.occupation,req.body.description, id];
+  con.query("update main.test set url= ? , talentName = ?, talentAge = ? ,talentOccupation=?,talentDescription=?  where id = ?",data ,function (err, result, fields) {
+    if (err) throw err;
+    if(result){
+      res.send(result);
+    }
+    console.log(result);
+});
+})
 
   module.exports = router;

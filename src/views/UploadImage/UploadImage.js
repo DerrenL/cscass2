@@ -31,7 +31,11 @@ class UploadImage extends Component {
 		this.state = {
 		 selectedFile: null,
      selectedFiles: null,
-     fileName: null
+     fileName: null,
+     talentName:null,
+     talentAge:null,
+     talentOccupation:null,
+     talentDescription:null
 		}
      }
      
@@ -44,17 +48,19 @@ class UploadImage extends Component {
 	   };
 
 	   singleFileUploadHandler = ( event ) => {
+    const data2 = {name: this.state.talentName, age: this.state.talentAge, occupation: this.state.talentOccupation, description: this.state.talentDescription }
     const data = new FormData();// If file selected
     //console.log(this.state.selectedFile);
 		if ( this.state.selectedFile ) {
       (async () => {let test = await init()
       if(test>0.7){
-        console.log("cannot pass" + test);
+        console.log("cannot pass " + test);
         this.ocShowAlert( 'Please upload file safe for work', 'red' );
       }
       else{
-        console.log("can pass"+ test);
-        data.append( 'profileImage', this.state.selectedFile, this.state.selectedFile.name );
+        console.log("can pass "+ test);
+        data.append( 'profileImage', this.state.selectedFile, this.state.selectedFile.name);
+        data.append( 'data2', JSON.stringify(data2));
         axios.post( '/api/profile/profile-img-upload', data, {
           headers: {
              'accept': 'application/json',
@@ -107,6 +113,19 @@ class UploadImage extends Component {
   };
 
 
+  handleTalentName =(e) => {
+    this.setState({talentName: e.target.value});
+}
+  handleTalentAge =(e) => {
+    this.setState({talentAge: e.target.value});
+  }
+  handleTalentOccupation =(e) => {
+    this.setState({talentOccupation: e.target.value});
+  }
+  handleTalentDescription =(e) => {
+    this.setState({talentDescription: e.target.value});
+  }
+
 
 		// ShowAlert Function
  	ocShowAlert = ( message, background = '#3089cf' ) => {
@@ -132,25 +151,22 @@ class UploadImage extends Component {
 				{/* Single File Upload*/}
 				<div className="card border-light mb-3 mt-5" style={{ boxShadow: '0 5px 10px 2px rgba(195,192,192,.5)' }}>
       			<div className="card-header">
-       			<h3 style={{ color: '#555', marginLeft: '12px' }}>Single Image Upload</h3>
+       			<h3 style={{ color: '#555', marginLeft: '12px' }}>Talent Image And Details Upload</h3>
        			<p className="text-muted" style={{ marginLeft: '12px' }}>Upload Size: 250px x 250px ( Max 2MB )</p>
       			</div>
       			<div className="card-body">
-       			<p className="card-text">Please upload an image to send to AWS S3</p>
+       			<p className="card-text">Please upload an image to send to AWS S3 and SQL Database</p>
        			<input type="file" id="wat" onChange={this.singleFileChangedHandler}/>
+             <br></br>
+            <input type="text" onChange={this.handleTalentName} placeholder="Talent's Name.." id="talentname" required></input>
+            <br></br>
+            <input type="number" onChange={this.handleTalentAge} placeholder="Talent's Age.." id="talentage" required></input>
+            <br></br>
+            <input type="text" onChange={this.handleTalentOccupation} placeholder="Talent's Occupation.." id="talentoccupation" required></input>
+            <br></br>
+            <textarea id="talentdescription" onChange={this.handleTalentDescription} placeholder="More about talent.." required></textarea>
       			<div className="mt-5">
         			<button className="btn btn-info" onClick={this.singleFileUploadHandler}>Upload!</button>
-       			</div>
-            <br></br>
-            <input type="text" placeholder="Talent's Name.." id="talentname" required></input>
-            <br></br>
-            <input type="number" placeholder="Talent's Age.." id="talentage" required></input>
-            <br></br>
-            <input type="text" placeholder="Talent's Occupation.." id="talentoccupation" required></input>
-            <br></br>
-            <textarea id="talentdescription" placeholder="More about talent.." required></textarea>
-            <div className="mt-5">
-        			<button className="btn btn-info" onClick={this.updatetalentinfo}>Submit talent information</button>
        			</div>
       			</div>
      			</div>

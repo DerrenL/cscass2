@@ -46,6 +46,7 @@
     "react-swipeable-views": "0.13.9",
     "recombee-api-client": "^3.0.0",
     "recombee-js-api-client": "^3.0.0",
+    "selenium-webdriver": "^4.0.0-alpha.7",
     "stripe": "^8.79.0",
     "url": "^0.11.0"
   },

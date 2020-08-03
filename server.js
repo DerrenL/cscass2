@@ -222,6 +222,63 @@ app.use(cors());
 var http = require("http");
 var httpServer = http.createServer(app);
 
+//cross browser testing
+const webdriver = require('selenium-webdriver');
+/*
+    Setup remote driver
+    Params
+    ----------
+    platform : Supported platform - (Windows 10, Windows 8.1, Windows 8, Windows 7,  macOS High Sierra, macOS Sierra, OS X El Capitan, OS X Yosemite, OS X Mavericks)
+    browserName : Supported platform - (chrome, firefox, Internet Explorer, MicrosoftEdge, Safari)
+    version :  Supported list of version can be found at https://www.lambdatest.com/capabilities-generator/
+*/
+ 
+// username: Username can be found at automation dashboard
+const USERNAME = 'derrenlow1999';
+ 
+// AccessKey:  AccessKey can be generated from automation dashboard or profile section
+const KEY = '1qlPDx57hAbIXlzFUGPNfADnlKoaZsoGhQOKO09pxvIq1ZooeY';
+ 
+// gridUrl: gridUrl can be found at automation dashboard
+const GRID_HOST = 'hub.lambdatest.com/wd/hub';
+
+function searchTextOnGoogle() {
+    // Setup Input capabilities
+    const capabilities = {
+        platform: 'windows 10',
+        browserName: 'Firefox',
+        version: '78.0',
+        resolution: '1280x800',
+        network: true,
+        visual: true,
+        console: true,
+        video: true,
+        name: 'Testing web server', // name of the test
+        build: 'NodeJS build' // name of the build
+    }
+ 
+    // URL: https://hub.lambdatest.com/wd/hub
+    const gridUrl = 'https://' + USERNAME + ':' + KEY + '@' + GRID_HOST;
+ 
+    // setup and build selenium driver object
+    const driver = new webdriver.Builder()
+        .usingServer(gridUrl)
+        .withCapabilities(capabilities)
+        .build();
+ 
+    // navigate to a url, search for a text and get title of page
+    const url = 'https://brancbranchfinal.d2yfklzd9bs9ld.amplifyapp.com/';
+    driver.get(url).then(function() {
+            driver.getTitle().then(function(title) {
+                setTimeout(function() {
+                    console.log(title);
+                    driver.quit();
+                }, 5000);
+            });
+    });
+}
+searchTextOnGoogle();
+
 
 // Set up a port
 const port = process.env.PORT || 5000;

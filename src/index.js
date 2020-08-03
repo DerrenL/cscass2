@@ -15,6 +15,7 @@ import SignupPage from "views/SignupPage/SignupPage.js";
 import UploadImagePage from "views/UploadImage/UploadImage.js";
 import AfterLoginComponents from "views/Components/AfterLogin.js";
 import SubscribePage from "views/SubscribePage/SubscribePage.js";
+import EditTalentPage from "views/Components/EditBasics.js";
 
 var hist = createBrowserHistory();
 
@@ -28,6 +29,7 @@ ReactDOM.render(
       <Route path="/subscribe-page" component={SubscribePage} />
       <Route path="/uploadimage-page" component={UploadImagePage} />
       <Route path="/afterlogin-page" component={AfterLoginComponents} />
+      <Route path="/edittalent-page" component={EditTalentPage} />
       <Route path="/" component={Components} />
     </Switch>
   </Router>,

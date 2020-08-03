@@ -28,23 +28,23 @@ import AfterLoginSectionBasics from "./Sections/AfterLoginSectionBasics.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 
-// Initialize client with name of your database and PUBLIC token
-var recombee = require('recombee-api-client');
-var rqs = recombee.requests;
-var client = new recombee.ApiClient('csc-assignment2-dev', 'LslaDRa4LOfTo6ZYEHOFmP0O79XZ3hzZkCfrO1cG5WXwWHHSxZtuJOUaWIfyQFTD');
+// // Initialize client with name of your database and PUBLIC token
+// var recombee = require('recombee-api-client');
+// var rqs = recombee.requests;
+// var client = new recombee.ApiClient('csc-assignment2-dev', 'LslaDRa4LOfTo6ZYEHOFmP0O79XZ3hzZkCfrO1cG5WXwWHHSxZtuJOUaWIfyQFTD');
 
-var interactions = require('../../purchases.json');
+// var interactions = require('../../purchases.json');
 
-var requests = interactions.map((interaction) => {
-  var userId = interaction['user_id'];
-  var itemId = interaction['item_id'];
-  var time = interaction['timestamp'];
+// var requests = interactions.map((interaction) => {
+//   var userId = interaction['user_id'];
+//   var itemId = interaction['item_id'];
+//   var time = interaction['timestamp'];
 
-  return new rqs.AddPurchase(userId, itemId, {timestamp: time, cascadeCreate: true});
-});
-client.send(new rqs.Batch(requests), (err, responses) => {
-  console.log(responses);
-});
+//   return new rqs.AddPurchase(userId, itemId, {timestamp: time, cascadeCreate: true});
+// });
+// client.send(new rqs.Batch(requests), (err, responses) => {
+//   console.log(responses);
+// });
 
 
 //================
