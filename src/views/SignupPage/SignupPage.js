@@ -18,57 +18,64 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardFooter from "components/Card/CardFooter.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
-import axios from 'axios';
-import {useState} from 'react';
+import axios from "axios";
+import { useState } from "react";
 
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
 import image from "assets/img/bg7.jpg";
-import {auth,db} from "../../Firebase.js";
+import { auth, db } from "../../Firebase.js";
 
 const useStyles = makeStyles(styles);
 
-
-
 export default function SignupPage(props) {
-  
-  function register(){
-    if (registeremail != "" && registerpassword != "" && registerconfirmpassword != "") {
+  function register() {
+    if (
+      registeremail != "" &&
+      registerpassword != "" &&
+      registerconfirmpassword != ""
+    ) {
       if (registerpassword == registerconfirmpassword) {
-          var result = auth.createUserWithEmailAndPassword(registeremail, registerpassword).then(cred =>{
-            return db.collection('users').doc(cred.user.email).set({
+        var result = auth
+          .createUserWithEmailAndPassword(registeremail, registerpassword)
+          .then((cred) => {
+            axios
+              .post(
+                `https://csc-test-app.herokuapp.com/recombee/adduser/${cred.user.uid}`
+              )
+              .catch((err) => {
+                console.error(err);
+              });
+            return db.collection("users").doc(cred.user.email).set({
               uid: cred.user.uid,
               name: registername,
-              role: 'Free Registered User',
-              email: cred.user.email
-          })
-        })
-          result.then(function(){
-            window.location.href = "/afterlogin-page"
-          })
-          result.catch(function (error) {
-              var errorCode = error.code;
-              var errorMsg = error.message;
-
-              console.log(errorCode + errorMsg);
-              window.alert("Message: " + errorMsg)
-
+              role: "Free Registered User",
+              email: cred.user.email,
+            });
           });
+        result.then(function () {
+          window.location.href = "/afterlogin-page";
+        });
+        result.catch(function (error) {
+          var errorCode = error.code;
+          var errorMsg = error.message;
+
+          console.log(errorCode + errorMsg);
+          window.alert("Message: " + errorMsg);
+        });
+      } else {
+        window.alert("Password and Confirm Password do not match.");
       }
-      else{
-          window.alert("Password and Confirm Password do not match.")
-      }
-  }
-  else {
-      window.alert("Please fill out all fields!")
-  }
+    } else {
+      window.alert("Please fill out all fields!");
+    }
   }
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
-  const [registername,setRegisterName] = useState("");
-  const [registeremail,setRegisterEmail] = useState("");
-  const [registerpassword,setRegisterPassword] = useState("");
-  const [registerconfirmpassword,setRegisterConfirmPassword] = useState("");
-  setTimeout(function() {
+  const [registername, setRegisterName] = useState("");
+  const [registeremail, setRegisterEmail] = useState("");
+  const [registerpassword, setRegisterPassword] = useState("");
+  const [registerconfirmpassword, setRegisterConfirmPassword] = useState("");
+  setTimeout(function () {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
@@ -87,7 +94,7 @@ export default function SignupPage(props) {
         style={{
           backgroundImage: "url(" + image + ")",
           backgroundSize: "cover",
-          backgroundPosition: "top center"
+          backgroundPosition: "top center",
         }}
       >
         <div className={classes.container}>
@@ -103,7 +110,7 @@ export default function SignupPage(props) {
                         href="#pablo"
                         target="_blank"
                         color="transparent"
-                        onClick={e => e.preventDefault()}
+                        onClick={(e) => e.preventDefault()}
                       >
                         <i className={"fab fa-twitter"} />
                       </Button>
@@ -112,7 +119,7 @@ export default function SignupPage(props) {
                         href="#pablo"
                         target="_blank"
                         color="transparent"
-                        onClick={e => e.preventDefault()}
+                        onClick={(e) => e.preventDefault()}
                       >
                         <i className={"fab fa-facebook"} />
                       </Button>
@@ -121,7 +128,7 @@ export default function SignupPage(props) {
                         href="#pablo"
                         target="_blank"
                         color="transparent"
-                        onClick={e => e.preventDefault()}
+                        onClick={(e) => e.preventDefault()}
                       >
                         <i className={"fab fa-google-plus-g"} />
                       </Button>
@@ -129,12 +136,12 @@ export default function SignupPage(props) {
                   </CardHeader>
                   <p className={classes.divider}>Or Be Classical</p>
                   <CardBody>
-                   <CustomInput
-                      onChange={e=>setRegisterName(e.target.value)}
+                    <CustomInput
+                      onChange={(e) => setRegisterName(e.target.value)}
                       labelText="Name..."
                       id="name"
                       formControlProps={{
-                        fullWidth: true
+                        fullWidth: true,
                       }}
                       inputProps={{
                         type: "text",
@@ -142,15 +149,15 @@ export default function SignupPage(props) {
                           <InputAdornment position="end">
                             <People className={classes.inputIconsColor} />
                           </InputAdornment>
-                        )
+                        ),
                       }}
-                    /> 
+                    />
                     <CustomInput
-                      onChange={e=>setRegisterEmail(e.target.value)}
+                      onChange={(e) => setRegisterEmail(e.target.value)}
                       labelText="Email..."
                       id="email"
                       formControlProps={{
-                        fullWidth: true
+                        fullWidth: true,
                       }}
                       inputProps={{
                         type: "email",
@@ -158,15 +165,15 @@ export default function SignupPage(props) {
                           <InputAdornment position="end">
                             <Email className={classes.inputIconsColor} />
                           </InputAdornment>
-                        )
+                        ),
                       }}
                     />
                     <CustomInput
-                      onChange={e=>setRegisterPassword(e.target.value)}
+                      onChange={(e) => setRegisterPassword(e.target.value)}
                       labelText="Password"
                       id="pass"
                       formControlProps={{
-                        fullWidth: true
+                        fullWidth: true,
                       }}
                       inputProps={{
                         type: "password",
@@ -177,15 +184,17 @@ export default function SignupPage(props) {
                             </Icon>
                           </InputAdornment>
                         ),
-                        autoComplete: "off"
+                        autoComplete: "off",
                       }}
                     />
-                     <CustomInput
-                      onChange={e=>setRegisterConfirmPassword(e.target.value)}
+                    <CustomInput
+                      onChange={(e) =>
+                        setRegisterConfirmPassword(e.target.value)
+                      }
                       labelText="Confirm Password"
                       id="pass"
                       formControlProps={{
-                        fullWidth: true
+                        fullWidth: true,
                       }}
                       inputProps={{
                         type: "password",
@@ -196,7 +205,7 @@ export default function SignupPage(props) {
                             </Icon>
                           </InputAdornment>
                         ),
-                        autoComplete: "off"
+                        autoComplete: "off",
                       }}
                     />
                   </CardBody>

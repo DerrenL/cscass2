@@ -5,16 +5,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import GridContainer from "components/Grid/GridContainer.js";
 import GridItem from "components/Grid/GridItem.js";
 import Card from "components/Card/Card.js";
-import axios from 'axios';
-import { useState, useEffect, Component } from 'react';
-import Button from '@material-ui/core/Button';
+import axios from "axios";
+import { useState, useEffect, Component } from "react";
+import Button from "@material-ui/core/Button";
 import CardBody from "components/Card/CardBody.js";
 import { URL } from "url";
 import { forEachTrailingCommentRange } from "typescript";
 
-
 var pageURL = window.location.href;
-var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
+var lastURLSegment = pageURL.substr(pageURL.lastIndexOf("/") + 1);
 
 //EDIT
 // function editTalent() {
@@ -28,7 +27,7 @@ var lastURLSegment = pageURL.substr(pageURL.lastIndexOf('/') + 1);
 //       "occupation": this.state.displayoccupation,
 //       "description": this.state.displaydescription
 //     })
- 
+
 //   window.alert('Successfully edited talent!')
 //   window.location.href = "/afterlogin-page"
 //   //}
@@ -46,66 +45,69 @@ class EditBasics extends Component {
       displayage: null,
       displayname: null,
       displayoccupation: null,
-      displaydescription: null
-    }
+      displaydescription: null,
+    };
   }
   componentDidMount() {
     try {
       axios
-        .get('/api/profile/onetalent-details/' + lastURLSegment)
+        .get(
+          "https://csc-test-app.herokuapp.com/onetalent-details/" +
+            lastURLSegment
+        )
         .then((response) => {
-          let temp=[];
-          temp.push(response.data[0])
+          let temp = [];
+          temp.push(response.data[0]);
           let data = temp;
           this.setState({ data });
           console.log(this.state.data[0].url);
           let displayurl = this.state.data[0].url;
-          this.setState({displayurl});
+          this.setState({ displayurl });
           let displayname = this.state.data[0].talentName;
-          this.setState({displayname});
+          this.setState({ displayname });
           let displayage = this.state.data[0].talentAge;
-          this.setState({displayage});
+          this.setState({ displayage });
           let displayoccupation = this.state.data[0].talentOccupation;
-          this.setState({displayoccupation});
+          this.setState({ displayoccupation });
           let displaydescription = this.state.data[0].talentDescription;
-          this.setState({displaydescription});
-
-        })
-    }
-    catch (error) {
+          this.setState({ displaydescription });
+        });
+    } catch (error) {
       console.log(error);
     }
   }
-  
-handleTalentUrl =(e) => {
-    this.setState({displayurl: e.target.value});
-} 
-handleTalentName =(e) => {
-    this.setState({displayname: e.target.value});
-}
-handleTalentAge =(e) => {
-  this.setState({displayage: e.target.value});
-}
-handleTalentOccupation =(e) => {
-  this.setState({displayoccupation: e.target.value});
-}
-handleTalentDescription =(e) => {
-  this.setState({displaydescription: e.target.value});
-}
 
-editTalent = (event) => {
-  axios
-  .put('/api/profile/edit-talent/' + lastURLSegment, {
-    "url": this.state.displayurl,
-    "name": this.state.displayname,
-    "age": this.state.displayage,
-    "occupation": this.state.displayoccupation,
-    "description": this.state.displaydescription
-  })
+  handleTalentUrl = (e) => {
+    this.setState({ displayurl: e.target.value });
+  };
+  handleTalentName = (e) => {
+    this.setState({ displayname: e.target.value });
+  };
+  handleTalentAge = (e) => {
+    this.setState({ displayage: e.target.value });
+  };
+  handleTalentOccupation = (e) => {
+    this.setState({ displayoccupation: e.target.value });
+  };
+  handleTalentDescription = (e) => {
+    this.setState({ displaydescription: e.target.value });
+  };
 
-window.alert('Successfully edited talent!')
-window.location.href = "/afterlogin-page"
-}
+  editTalent = (event) => {
+    axios.put(
+      "https://csc-test-app.herokuapp.com/edit-talent/" + lastURLSegment,
+      {
+        url: this.state.displayurl,
+        name: this.state.displayname,
+        age: this.state.displayage,
+        occupation: this.state.displayoccupation,
+        description: this.state.displaydescription,
+      }
+    );
+
+    window.alert("Successfully edited talent!");
+    window.location.href = "/afterlogin-page";
+  };
 
   // let test = [];
   // const [testa, setTesta] = useState("a")
@@ -123,8 +125,7 @@ window.location.href = "/afterlogin-page"
   // }
   // useEffect(() => {
   //   fetchData();
-  // }, []); //This will run only once 
-
+  // }, []); //This will run only once
 
   // //get specific talent
   // const temp=[];
@@ -153,37 +154,72 @@ window.location.href = "/afterlogin-page"
   // const [displayoccupation,setDisplayOccupation] = useState();
   // const [displaydescription,setDisplayDescription] = useState();
 
-
-
-
-
   render() {
     return (
       <div>
-        <h3><b>Edit Talent</b></h3>
+        <h3>
+          <b>Edit Talent</b>
+        </h3>
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardBody>
-                <h4><b>Image URL :</b></h4>
-                <input className="form-control" type="text" defaultValue={this.state.displayurl} onChange={this.handleTalentUrl} />
+                <h4>
+                  <b>Image URL :</b>
+                </h4>
+                <input
+                  className="form-control"
+                  type="text"
+                  defaultValue={this.state.displayurl}
+                  onChange={this.handleTalentUrl}
+                />
                 <br></br>
-                <h4><b>Talent Name :</b></h4>
-                <input className="form-control" type="text" defaultValue={this.state.displayname} onChange={this.handleTalentName} />
+                <h4>
+                  <b>Talent Name :</b>
+                </h4>
+                <input
+                  className="form-control"
+                  type="text"
+                  defaultValue={this.state.displayname}
+                  onChange={this.handleTalentName}
+                />
                 <br></br>
-                <h4><b>Talent Age :</b></h4>
-                <input className="form-control" type="text" defaultValue={this.state.displayage} onChange={this.handleTalentAge} />
+                <h4>
+                  <b>Talent Age :</b>
+                </h4>
+                <input
+                  className="form-control"
+                  type="text"
+                  defaultValue={this.state.displayage}
+                  onChange={this.handleTalentAge}
+                />
                 <br></br>
-                <h4><b>Talent Occupation :</b></h4>
-                <input className="form-control" type="text" defaultValue={this.state.displayoccupation} onChange={this.handleTalentOccupation} />
+                <h4>
+                  <b>Talent Occupation :</b>
+                </h4>
+                <input
+                  className="form-control"
+                  type="text"
+                  defaultValue={this.state.displayoccupation}
+                  onChange={this.handleTalentOccupation}
+                />
                 <br></br>
-                <h4><b>Talent Description :</b></h4>
-                <textarea className="form-control" type="text" defaultValue={this.state.displaydescription} onChange={this.handleTalentDescription} />
+                <h4>
+                  <b>Talent Description :</b>
+                </h4>
+                <textarea
+                  className="form-control"
+                  type="text"
+                  defaultValue={this.state.displaydescription}
+                  onChange={this.handleTalentDescription}
+                />
               </CardBody>
             </Card>
           </GridItem>
           <GridItem xs={12} sm={12} md={12}>
-            <Button onClick={this.editTalent} fullWidth color="success">Save</Button>
+            <Button onClick={this.editTalent} fullWidth color="success">
+              Save
+            </Button>
           </GridItem>
         </GridContainer>
       </div>

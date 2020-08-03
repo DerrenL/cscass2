@@ -1,5 +1,5 @@
-import React, { useEffect, useReducer } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
+import React, { useEffect, useReducer } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
@@ -19,19 +19,16 @@ import GridItem from "components/Grid/GridItem.js";
 import Button from "components/CustomButtons/Button.js";
 import CardFooter from "components/Card/CardFooter.js";
 import CustomInput from "components/CustomInput/CustomInput.js";
-import axios from 'axios';
-import { useState } from 'react';
+import axios from "axios";
+import { useState } from "react";
 
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
-
-
-
 const fetchCheckoutSession = async ({ quantity }) => {
-  return fetch('/create-checkout-session', {
-    method: 'POST',
+  return fetch("https://csc-test-app.herokuapp.com/create-checkout-session", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       quantity,
@@ -40,15 +37,15 @@ const fetchCheckoutSession = async ({ quantity }) => {
 };
 
 const formatPrice = ({ amount, currency, quantity }) => {
-  const numberFormat = new Intl.NumberFormat('en-US', {
-    style: 'currency',
+  const numberFormat = new Intl.NumberFormat("en-US", {
+    style: "currency",
     currency,
-    currencyDisplay: 'symbol',
+    currencyDisplay: "symbol",
   });
   const parts = numberFormat.formatToParts(amount);
   let zeroDecimalCurrency = true;
   for (let part of parts) {
-    if (part.type === 'decimal') {
+    if (part.type === "decimal") {
       zeroDecimalCurrency = false;
     }
   }
@@ -59,7 +56,7 @@ const formatPrice = ({ amount, currency, quantity }) => {
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'useEffectUpdate':
+    case "useEffectUpdate":
       return {
         ...state,
         ...action.payload,
@@ -69,7 +66,7 @@ function reducer(state, action) {
           quantity: state.quantity,
         }),
       };
-    case 'increment':
+    case "increment":
       return {
         ...state,
         quantity: state.quantity + 1,
@@ -79,7 +76,7 @@ function reducer(state, action) {
           quantity: state.quantity + 1,
         }),
       };
-    case 'decrement':
+    case "decrement":
       return {
         ...state,
         quantity: state.quantity - 1,
@@ -89,9 +86,9 @@ function reducer(state, action) {
           quantity: state.quantity - 1,
         }),
       };
-    case 'setLoading':
+    case "setLoading":
       return { ...state, loading: action.payload.loading };
-    case 'setError':
+    case "setError":
       return { ...state, error: action.payload.error };
     default:
       throw new Error();
@@ -100,11 +97,11 @@ function reducer(state, action) {
 
 const Checkout = () => {
   const useStyles = makeStyles(styles);
-const classes = useStyles();
-const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
-setTimeout(function () {
-  setCardAnimation("");
-}, 700);
+  const classes = useStyles();
+  const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
+  setTimeout(function () {
+    setCardAnimation("");
+  }, 700);
   const [state, dispatch] = useReducer(reducer, {
     quantity: 1,
     price: null,
@@ -117,12 +114,12 @@ setTimeout(function () {
     async function fetchConfig() {
       // Fetch config from our backend.
       const { publicKey, unitAmount, currency } = await fetch(
-        '/config'
+        "/config"
       ).then((res) => res.json());
       // Make sure to call `loadStripe` outside of a component’s render to avoid
       // recreating the `Stripe` object on every render.
       dispatch({
-        type: 'useEffectUpdate',
+        type: "useEffectUpdate",
         payload: { unitAmount, currency, stripe: await loadStripe(publicKey) },
       });
     }
@@ -131,7 +128,7 @@ setTimeout(function () {
 
   const handleClick = async (event) => {
     // Call your backend to create the Checkout session.
-    dispatch({ type: 'setLoading', payload: { loading: true } });
+    dispatch({ type: "setLoading", payload: { loading: true } });
     const { sessionId } = await fetchCheckoutSession({
       quantity: state.quantity,
     });
@@ -143,43 +140,44 @@ setTimeout(function () {
     // error, display the localized error message to your customer
     // using `error.message`.
     if (error) {
-      dispatch({ type: 'setError', payload: { error } });
-      dispatch({ type: 'setLoading', payload: { loading: false } });
+      dispatch({ type: "setError", payload: { error } });
+      dispatch({ type: "setLoading", payload: { loading: false } });
     }
   };
 
   return (
     <div>
-          <GridContainer justify="center">
-            <GridItem xs={12} sm={12} md={12}>
-              <Card className={classes[cardAnimaton]}>
-                  <CardHeader color="primary" className={classes.cardHeader}>
-                    <h4>Subscription Plan</h4>
-                  </CardHeader>
-                  <CardBody>
-                    Subscribe now for only $1.00 daily!
-                  </CardBody>
-                  <CardFooter className={classes.cardFooter}>
-                    <Button role="link"
-                        onClick={handleClick}
-                        disabled={!state.stripe || state.loading}
-                         simple color="primary" size="lg" >
-                      Subscribe
-                    </Button>
-                    <div className="sr-field-error">{state.error?.message}</div>
-                  </CardFooter>
-              </Card>
-            </GridItem>
-          </GridContainer>
-        </div>
+      <GridContainer justify="center">
+        <GridItem xs={12} sm={12} md={12}>
+          <Card className={classes[cardAnimaton]}>
+            <CardHeader color="primary" className={classes.cardHeader}>
+              <h4>Subscription Plan</h4>
+            </CardHeader>
+            <CardBody>Subscribe now for only $1.00 daily!</CardBody>
+            <CardFooter className={classes.cardFooter}>
+              <Button
+                role="link"
+                onClick={handleClick}
+                disabled={!state.stripe || state.loading}
+                simple
+                color="primary"
+                size="lg"
+              >
+                Subscribe
+              </Button>
+              <div className="sr-field-error">{state.error?.message}</div>
+            </CardFooter>
+          </Card>
+        </GridItem>
+      </GridContainer>
+    </div>
     // <div className="sr-root">
     //   <div className="sr-main">
     //     <header className="sr-header">
     //       <div className="sr-header__logo"></div>
     //     </header>
     //     <section className="container">
-          
-         
+
     //       {/* <div>
     //         <h2>Subscription Plan</h2>
     //         <h4>Subscribe now for only $1.00 daily!</h4>
